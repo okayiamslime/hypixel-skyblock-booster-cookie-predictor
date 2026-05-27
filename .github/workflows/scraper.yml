@@ -3,8 +3,8 @@ name: Auto Bazaar Scraper
 # 1. 什麼時候要觸發這個機器人？
 on:
   schedule:
-    - cron: '0 * * * *'  # 每個小時的 0 分觸發一次 (UTC時間)
-  workflow_dispatch:     # 允許我們手動點擊按鈕測試
+    - cron: '*/5 * * * *'
+  workflow_dispatch:
 
 # 2. 機器人要做哪些工作？
 jobs:
