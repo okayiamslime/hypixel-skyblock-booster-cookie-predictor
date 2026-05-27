@@ -13,6 +13,8 @@ jobs:
     permissions:
       contents: write      # 給予機器人寫入(上傳)檔案的權限
 
+    env:
+      FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
     steps:
       # 步驟 A：把你的 GitHub 程式碼下載到虛擬機裡
       - name: Checkout repository
