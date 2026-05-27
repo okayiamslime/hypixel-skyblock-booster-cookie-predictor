@@ -4,7 +4,7 @@ from datetime import datetime, timezone, timedelta
 import os
 
 def fetch_bazaar_data():
-    print("🤖 正在呼叫 Hypixel API...")
+    print("正在呼叫 Hypixel API...")
     url = "https://api.hypixel.net/skyblock/bazaar"
     
     try:
@@ -17,12 +17,11 @@ def fetch_bazaar_data():
             
         products = data['products']
         
-        # 🌟 在這裡設定你想追蹤的物品清單 (必須是官方大寫英文 ID)
+        # 你想追蹤的物品清單
         TARGET_ITEMS = ['BOOSTER_COOKIE']
         
         records = []
-        # 取得當下時間
-        # 強制設定為台灣時間 (UTC+8)
+
         tz_tw = timezone(timedelta(hours=8))
         timestamp = datetime.now(tz_tw).strftime('%Y-%m-%d %H:%M:%S')
         
@@ -38,19 +37,16 @@ def fetch_bazaar_data():
                     'buy_volume': qs['buyVolume'],
                     'sell_volume': qs['sellVolume']
                 })
-        
-        # 轉成 DataFrame
-        # 轉成 DataFrame
+
+
         df = pd.DataFrame(records)
         
-        # 強制把所有數字四捨五入並轉成整數
         cols = ['buy_price', 'sell_price', 'buy_volume', 'sell_volume']
         df[cols] = df[cols].round(0).astype(int)
         
-        # 🌟 改為相對路徑，這樣 GitHub 機器人才能正確存檔
+        # 使 GitHub 機器人正確存檔
         file_name = 'bazaar_history.csv'
         
-        # 存檔邏輯：如果檔案不存在就建立並寫入標題；如果存在就接在下面(append)
         if not os.path.isfile(file_name):
             df.to_csv(file_name, index=False)
             print(f"✨ 建立新資料庫並寫入 {len(records)} 筆資料")
