@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 import os
 
 def fetch_bazaar_data():
@@ -22,7 +22,9 @@ def fetch_bazaar_data():
         
         records = []
         # 取得當下時間
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        # 強制設定為台灣時間 (UTC+8)
+        tz_tw = timezone(timedelta(hours=8))
+        timestamp = datetime.now(tz_tw).strftime('%Y-%m-%d %H:%M:%S')
         
         for item_id in TARGET_ITEMS:
             if item_id in products:
