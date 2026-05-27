@@ -1,0 +1,42 @@
+name: Auto Bazaar Scraper
+
+# 1. 什麼時候要觸發這個機器人？
+on:
+  schedule:
+    - cron: '0 * * * *'  # 每個小時的 0 分觸發一次 (UTC時間)
+  workflow_dispatch:     # 允許我們手動點擊按鈕測試
+
+# 2. 機器人要做哪些工作？
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest # 使用最新的 Linux 虛擬機
+    permissions:
+      contents: write      # 給予機器人寫入(上傳)檔案的權限
+
+    steps:
+      # 步驟 A：把你的 GitHub 程式碼下載到虛擬機裡
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 步驟 B：在虛擬機裡安裝 Python 3.10
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      # 步驟 C：依照 requirements.txt 安裝 pandas 等套件
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      # 步驟 D：執行你的預測程式！
+      - name: Run Scraper
+        run: python "Bazaar Predict.py"
+
+      # 步驟 E：把生出來的 csv 檔，推送(Push)回你的 GitHub 網頁上
+      - name: Commit and Push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git add bazaar_history.csv
+          git commit -m "Auto-update Bazaar data 🤖" || echo "No changes to commit"
+          git push
