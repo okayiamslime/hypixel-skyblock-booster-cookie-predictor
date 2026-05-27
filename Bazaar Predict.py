@@ -40,9 +40,14 @@ def fetch_bazaar_data():
                 })
         
         # 轉成 DataFrame
+        # 轉成 DataFrame
         df = pd.DataFrame(records)
         
-        # 🌟 【關鍵修改】改為相對路徑，這樣 GitHub 機器人才能正確存檔
+        # 強制把所有數字四捨五入並轉成整數
+        cols = ['buy_price', 'sell_price', 'buy_volume', 'sell_volume']
+        df[cols] = df[cols].round(0).astype(int)
+        
+        # 🌟 改為相對路徑，這樣 GitHub 機器人才能正確存檔
         file_name = 'bazaar_history.csv'
         
         # 存檔邏輯：如果檔案不存在就建立並寫入標題；如果存在就接在下面(append)
